@@ -1,11 +1,17 @@
+# Docker Compose - Infrastructure Services Only
+# For local development, app runs on host machine
+# Run with: docker-compose up -d
+
 services:
   db:
     image: postgres:16-alpine
+    container_name: nestjs-boilerplate-postgres
     environment:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_DATABASE}
-    container_name: nestjs-boilerplate-postgres
+    ports:
+      - "${DB_PORT}:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
@@ -15,35 +21,13 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: development  # Default to development
-    container_name: nestjs-boilerplate-app
-    environment:
-      - PORT=${PORT}
-      - NODE_ENV=${NODE_ENV:-development}
-    ports:
-      - '${PORT}:${PORT}'
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-    networks:
-      - nestjs-boilerplate-net
-    healthcheck:
-      test: ['CMD-SHELL', 'wget --spider -q http://localhost:${PORT}/healthcheck || exit 1']
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 40s
+    restart: unless-stopped
 
   redis:
     image: redis:7-alpine
     container_name: nestjs-boilerplate-redis
+    ports:
+      - "${REDIS_PORT}:6379"
     networks:
       - nestjs-boilerplate-net
     healthcheck:
@@ -51,6 +35,25 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: nestjs-boilerplate-pgadmin
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    ports:
+      - "${PGADMIN_HOST_PORT}:80"
+    depends_on:
+      - db
+    networks:
+      - nestjs-boilerplate-net
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    restart: unless-stopped
 
 networks:
   nestjs-boilerplate-net:
@@ -58,3 +61,4 @@ networks:
 
 volumes:
   postgres-data:
+  pgadmin-data:
