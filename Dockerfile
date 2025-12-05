@@ -26,8 +26,11 @@ COPY . .
 # Build the application
 RUN pnpm run build
 
-# Install only production dependencies in a clean step
-RUN pnpm install --frozen-lockfile --prod
+# Verify build succeeded
+RUN ls -la dist/
+
+# Prune dev dependencies for production
+RUN pnpm prune --prod
 
 
 ###################
@@ -52,6 +55,9 @@ COPY --from=build --chown=nestjs:nodejs /app/node_modules ./node_modules
 
 # Copy package.json
 COPY --from=build --chown=nestjs:nodejs /app/package.json ./package.json
+
+# Verify files were copied
+RUN ls -la && ls -la dist/
 
 # Switch to non-root user
 USER nestjs
