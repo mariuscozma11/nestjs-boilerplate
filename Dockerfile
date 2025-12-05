@@ -1,24 +1,28 @@
-###################
-# BASE STAGE
-###################
-FROM node:18-alpine AS base
-
-# Install pnpm globally
-RUN npm install -g pnpm
+# Stage 1: Dependencies
+FROM node:18-alpine AS deps
 
 WORKDIR /app
+
+# Install pnpm
+RUN npm install -g pnpm
 
 # Copy package files
 COPY package.json pnpm-lock.yaml ./
 
-
-###################
-# BUILD STAGE
-###################
-FROM base AS build
-
-# Install ALL dependencies (needed for build)
+# Install all dependencies (needed for build)
 RUN pnpm install --frozen-lockfile
+
+
+# Stage 2: Build
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Copy dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules
 
 # Copy source code
 COPY . .
@@ -26,48 +30,40 @@ COPY . .
 # Build the application
 RUN pnpm run build
 
-# Verify build succeeded
-RUN ls -la dist/
-
-# Prune dev dependencies for production
+# Remove dev dependencies
 RUN pnpm prune --prod
 
 
-###################
-# PRODUCTION STAGE
-###################
+# Stage 3: Production
 FROM node:18-alpine AS production
-
-# Install pnpm
-RUN npm install -g pnpm
 
 WORKDIR /app
 
-# Create non-root user for security
+# Install pnpm (needed for running migrations if required)
+RUN npm install -g pnpm
+
+# Create non-root user
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nestjs -u 1001
 
-# Copy built application from build stage
-COPY --from=build --chown=nestjs:nodejs /app/dist ./dist
-
-# Copy production node_modules
-COPY --from=build --chown=nestjs:nodejs /app/node_modules ./node_modules
-
 # Copy package.json
-COPY --from=build --chown=nestjs:nodejs /app/package.json ./package.json
+COPY --from=builder --chown=nestjs:nodejs /app/package.json ./
 
-# Verify files were copied
-RUN ls -la && ls -la dist/
+# Copy production dependencies
+COPY --from=builder --chown=nestjs:nodejs /app/node_modules ./node_modules
+
+# Copy built application
+COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
 
 # Switch to non-root user
 USER nestjs
 
-# Expose application port
+# Expose port
 EXPOSE 3000
 
-# Healthcheck
+# Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3000/healthcheck', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
 
-# Start the application in production mode
+# Start application
 CMD ["node", "dist/main.js"]
