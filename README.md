@@ -120,7 +120,8 @@ docker images | grep nestjs-boilerplate
 ```bash
 # Build dev image
 docker build --target development -t nestjs-boilerplate:dev .
-
+```
+```bash
 # Build prod image
 docker build --target production -t nestjs-boilerplate:prod .
 ```
