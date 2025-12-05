@@ -25,3 +25,90 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
+
+# Docker Workflow
+
+## Development
+
+```bash
+# Start all services (app, db, redis, pgadmin)
+docker-compose up
+
+# Start in background
+docker-compose up -d
+
+# Rebuild and start
+docker-compose up --build
+
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes (fresh start)
+docker-compose down -v
+
+# View logs
+docker-compose logs -f app
+```
+
+**What runs:**
+- App with hot-reload (source code mounted)
+- PostgreSQL + pgAdmin (localhost:${PGADMIN_HOST_PORT})
+- Redis
+- All ports exposed to host
+
+---
+
+## Production
+
+```bash
+# Start production services
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+# Rebuild and start
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
+
+# Stop
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
+
+# View logs
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs -f app
+```
+
+**What runs:**
+- Optimized production image (no source code volumes)
+- PostgreSQL + Redis (no exposed ports)
+- No pgAdmin
+- Auto-restart on failure
+
+---
+
+## Common Commands
+
+```bash
+# Access app container shell
+docker-compose exec app sh
+
+# Run migrations
+docker-compose exec app pnpm run migration:run
+
+# View all containers
+docker ps
+
+# View images
+docker images
+
+# Check image sizes
+docker images | grep nestjs-boilerplate
+```
+
+---
+
+## Build Images Only (No Run)
+
+```bash
+# Build dev image
+docker build --target development -t nestjs-boilerplate:dev .
+
+# Build prod image
+docker build --target production -t nestjs-boilerplate:prod .
+```
