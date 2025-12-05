@@ -33,19 +33,24 @@
 ```bash
 # Start all services (app, db, redis, pgadmin)
 docker-compose up
-
+```
+```bash
 # Start in background
 docker-compose up -d
-
+```
+```bash
 # Rebuild and start
 docker-compose up --build
-
+```
+```bash
 # Stop all services
 docker-compose down
-
+```
+```bash
 # Stop and remove volumes (fresh start)
 docker-compose down -v
-
+```
+```bash
 # View logs
 docker-compose logs -f app
 ```
@@ -63,13 +68,16 @@ docker-compose logs -f app
 ```bash
 # Start production services
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
-
+```
+```bash
 # Rebuild and start
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml up --build -d
-
+```
+```bash
 # Stop
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml down
-
+```
+```bash
 # View logs
 docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs -f app
 ```
@@ -87,16 +95,20 @@ docker-compose -f docker-compose.yml -f docker-compose.prod.yml logs -f app
 ```bash
 # Access app container shell
 docker-compose exec app sh
-
+```
+```bash
 # Run migrations
 docker-compose exec app pnpm run migration:run
-
+```
+```bash
 # View all containers
 docker ps
-
+```
+```bash
 # View images
 docker images
-
+```
+```bash
 # Check image sizes
 docker images | grep nestjs-boilerplate
 ```
