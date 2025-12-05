@@ -52,7 +52,7 @@ docker-compose logs -f app
 
 **What runs:**
 - App with hot-reload (source code mounted)
-- PostgreSQL + pgAdmin (localhost:${PGADMIN_HOST_PORT})
+- PostgreSQL + pgAdmin
 - Redis
 - All ports exposed to host
 
