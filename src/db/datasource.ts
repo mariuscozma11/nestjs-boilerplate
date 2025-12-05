@@ -13,8 +13,8 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_DATABASE,
   synchronize: false,
   entities: isProd ? ['dist/**/*.entity.js'] : ['src/**/*.entity.ts'],
-  migrations: isProd ? ['dist/db/migrations/*.js'] : ['src/db/migrations/*.ts'],
+  migrations: isProd ? ['dist/src/db/migrations/*.js'] : ['src/db/migrations/*.ts'],
   logging: !isProd,
-  migrationsRun: isProd ? true : false,
+  migrationsRun: isProd,
   ssl: isProd ? { rejectUnauthorized: false } : false,
 });
