@@ -15,6 +15,6 @@ export const AppDataSource = new DataSource({
   entities: isProd ? ['dist/**/*.entity.js'] : ['src/**/*.entity.ts'],
   migrations: isProd ? ['dist/db/migrations/*.js'] : ['src/db/migrations/*.ts'],
   logging: !isProd,
-  migrationsRun: false,
+  migrationsRun: isProd ? true : false,
   ssl: isProd ? { rejectUnauthorized: false } : false,
 });
