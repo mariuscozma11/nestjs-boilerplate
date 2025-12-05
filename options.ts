@@ -10,4 +10,4 @@ const options = {
   migrations: ['src/db/migrations/*{.ts,.js}'],
   logging: true,
   migrationsRun: process.env.NODE_ENV === 'production',   
-};
+};   
