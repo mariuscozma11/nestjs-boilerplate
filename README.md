@@ -1,38 +1,46 @@
 # Technology Stack
 
+<p align="center" >
+  <img src="https://cdn.worldvectorlogo.com/logos/nestjs.svg" alt="NestJS" height="60"/>
+  <img src="https://cdn.worldvectorlogo.com/logos/postgresql.svg" alt="PostgreSQL" height="60"/>
+  <img src="https://typeorm.io/img/typeorm-icon-colored.png" alt="TypeORM" height="60"/>
+  <img src="https://www.postgresql.org/message-id/attachment/1139/pgAdmin.svg" alt="pgAdmin" height="60"/>
+  <img src="https://cdn.worldvectorlogo.com/logos/redis.svg" alt="Redis" height="60"/>
+  <img src="https://cdn.worldvectorlogo.com/logos/docker.svg" alt="Docker" height="60"/>
+</p>
+
+---
+
 ## Backend Framework
 
-### <img src="https://cdn.worldvectorlogo.com/logos/nestjs.svg" alt="NestJS" height="40" style="vertical-align: middle;"/> NestJS
-
+**NestJS**
 A progressive Node.js framework for building efficient, reliable and scalable server-side applications.
+
+---
 
 ## Database & ORM
 
-### <img src="https://cdn.worldvectorlogo.com/logos/postgresql.svg" alt="PostgreSQL" height="40" style="vertical-align: middle;"/> PostgreSQL
-
+**PostgreSQL**
 Powerful, open-source relational database system with strong reliability and data integrity.
 
-### <img src="https://typeorm.io/img/typeorm-icon-colored.png" alt="TypeORM" height="40" style="vertical-align: middle;"/> TypeORM
-
+**TypeORM**
 Modern ORM for TypeScript and JavaScript, supporting multiple databases with migrations and entity management.
+
+---
 
 ## Database Administration
 
-### <img src="https://www.postgresql.org/message-id/attachment/1139/pgAdmin.svg" alt="pgAdmin" height="40" style="vertical-align: middle;"/> pgAdmin
+**pgAdmin**
+Web-based administration tool for PostgreSQL databases *(development only)*.
 
-Web-based administration tool for PostgreSQL databases (development only).
+---
 
 ## Caching & Queue
 
-### <img src="https://cdn.worldvectorlogo.com/logos/redis.svg" alt="Redis" height="40" style="vertical-align: middle;"/> Redis
-
+**Redis**
 In-memory data structure store for caching, session management, and message queuing.
 
-## Containerization
-
-### <img src="https://cdn.worldvectorlogo.com/logos/docker.svg" alt="Docker" height="40" style="vertical-align: middle;"/> Docker
-
-Multi-stage Docker setup with separate development and production configurations.
+---
 
 # Docker Workflow
 
